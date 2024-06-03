@@ -12,16 +12,20 @@ import javafx.stage.Stage;
 public class ControllerSimulation extends Application {
 
     private static final double ZONE_MIN_X = 0;
-    private static final double ZONE_MAX_X = 800;
-    private static final double ZONE_MIN_Y = 0;
-    private static final double ZONE_MAX_Y = 800;
+    private  double ZONE_MAX_X  ;
+    private double ZONE_MIN_Y = 0 ;
+    private double ZONE_MAX_Y;
+    private double target_X = 192;
+    private double target_Y = 192;
 
     private static final int NUM_PLANETS = 5;
     private double[] newX = new double[NUM_PLANETS];
     private double[] newY = new double[NUM_PLANETS];
     private int[] steps = new int[NUM_PLANETS];
-    private int rayon = 40;
-    private int n = 1;
+    private int rayon = 20;
+    private int vitesse = 7;
+    private int n = 2;
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -29,11 +33,13 @@ public class ControllerSimulation extends Application {
         Group root = new Group();
         Scene theScene = new Scene(root);
         primaryStage.setScene(theScene);
-        Canvas canvas = new Canvas(800, 800);
+        Canvas canvas = new Canvas(800, 600);
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
+        ZONE_MAX_X = canvas.getWidth();
+        ZONE_MAX_Y = canvas.getHeight();
 
-        Image student = new Image("file:C:/Users/popo1/OneDrive - HESSO/HES/inf/javaFX/projectTest/earth.png");
+        Image student = new Image("earth.png");
         Image sun = new Image("file:C:/Users/popo1/OneDrive - HESSO/HES/inf/javaFX/projectTest/sun.png");
 
         // Initialisation des positions et étapes pour chaque students
@@ -49,7 +55,7 @@ public class ControllerSimulation extends Application {
                 double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
 
                 // Efface le canvas
-                gc.clearRect(0, 0, 800, 800);
+                gc.clearRect(0, 0,ZONE_MAX_X , ZONE_MAX_Y);
 
                 // Met à jour les positions et dessine chaque students
                 for (int i = 0; i < NUM_PLANETS; i++) {
@@ -66,19 +72,29 @@ public class ControllerSimulation extends Application {
                     if ((newY[i] >= rayon * 4 * NUM_PLANETS * n + (i+1)*rayon*2) && (steps[i] == 4)) {
                         steps[i] = 5;
                     }
+                    if(newY[i] >= ZONE_MAX_Y-rayon*2 ) {
+                        steps[i] = 6;
+                    }
+                    if(newX[i] >= ZONE_MAX_X - student.getWidth() && steps[i] == 6) {
+                        steps[i] = 7;
+                    }
+
+
+
 
                     // Met à jour la position en fonction de l'étape
                     switch (steps[i]) {
                         case 1:
                         case 5:
-                            newX[i] += 1;
+                        case 6:
+                            newX[i] += vitesse;
                             break;
                         case 2:
                         case 4:
-                            newY[i] += 1;
+                            newY[i] += vitesse;
                             break;
                         case 3:
-                            newX[i] -= 1;
+                            newX[i] -= vitesse;
                             break;
                     }
 
@@ -86,8 +102,10 @@ public class ControllerSimulation extends Application {
                     gc.drawImage(student, newX[i], newY[i]);
                 }
 
+
+
                 // Dessine le soleil (position fixe)
-                gc.drawImage(sun, 196, 196);
+                gc.drawImage(sun, target_X, target_Y);
             }
         }.start();
 
