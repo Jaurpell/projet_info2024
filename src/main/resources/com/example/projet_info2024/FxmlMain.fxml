@@ -6,15 +6,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:controller="com.example.projet_info2024.ControllerSimulation" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ProgressBar fx:id="progresseBarTime" layoutX="400.0" layoutY="21.0" prefWidth="200.0" progress="0.0" />
       <Button fx:id="buttonStart" layoutX="934.0" layoutY="27.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" text="Start" />
       <Button fx:id="buttonStop" layoutX="934.0" layoutY="68.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" text="Stop" />
       <Button fx:id="buttonRes" layoutX="934.0" layoutY="119.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" text="Restart" />
-      <AnchorPane fx:id="AnchSimul" layoutX="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0">
+      <AnchorPane  fx:id="AnchSimul" layoutX="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0">
          <children>
-            <Canvas height="800.0" width="800.0" />
+            <Canvas fx:id="canvasSimu" height="800.0" width="800.0" />
          </children>
       </AnchorPane>
    </children>
