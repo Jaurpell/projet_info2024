@@ -2,6 +2,8 @@ package com.example.projet_info2024;
 
 import javafx.scene.image.Image;
 
+import java.util.ArrayList;
+
 public class Diploma extends ObjectScheme{
 
     //Méthodes venant de la class abstract ObjectScheme
@@ -14,10 +16,10 @@ public class Diploma extends ObjectScheme{
     @Override
     public void changePosition(double[] position_X, double[] position_Y) {
         for (int i = 0; i < 1; i++) {
-            targetX[i] = 0;
-            targetY[i] = 0;
+            targetX[i] = position_X[i];
+            targetY[i] = position_Y[i];
             // Dessine le soleil (position fixe)
-            gc.drawImage(imageDiploma, position_X[i], position_Y[i]);
+            gc.drawImage(imageDiploma, targetX[i], targetY[i]);
         }
 
 
@@ -25,22 +27,25 @@ public class Diploma extends ObjectScheme{
 
     @Override
     public void changeRadiusCommunication(int radius) {
-
+        this.radiusCommunication = radius;
     }
 
     @Override
-    public double[] getPosition() {
-        return new double[0];
+    public ArrayList<double[]> getPosition() {
+        ArrayList<double[]> position = new ArrayList();
+        position.add(targetX);
+        position.add(targetY);
+        return position;
     }
 
     @Override
     public float getRadiusCommunication() {
-        return 0;
+        return this.radiusCommunication;
     }
 
     @Override
     public Image getImage() {
-        return null;
+        return imageDiploma;
     }
 
     @Override

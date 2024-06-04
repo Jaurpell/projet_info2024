@@ -4,6 +4,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.util.ArrayList;
+
 /**
  * Abstract class representing the different object that you should implement (agent and target).
  */
@@ -51,7 +53,7 @@ public abstract void changeRadiusCommunication(int radius);
  * This method returns the object position.
  * @return A float array containing the position {x,y}
  */
-public abstract double[] getPosition();
+public abstract ArrayList<double[]> getPosition();
 
 /**
  * This method returns the object communication radius.
@@ -70,7 +72,7 @@ public abstract Image getImage();
  * This method checks the distance between the current object (this) and another object.
  * If the distance is less than the communication radius, then the method returns true, indicating
  * that the objects can communicate. Otherwise, it returns false, meaning no communication is possible.
- * Your must use this method before attempting to exchange information between objects.
+ * You must use this method before attempting to exchange information between objects.
  *
  * @param object The other ObjectScheme
  *

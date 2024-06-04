@@ -2,6 +2,9 @@ package com.example.projet_info2024;
 
 import javafx.scene.image.Image;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Students extends ObjectScheme{
 
     int modeChoisi = 1;
@@ -18,15 +21,12 @@ public class Students extends ObjectScheme{
             case 1 : //Mode avec 5 chercheurs
                 imageStudents = new Image("file:C:/Users/popo1/OneDrive - HESSO/HES/inf/javaFX/projectTest/Samuel.png");
                 break;
-
-            /*
             case 2 : //Mode avec 4 chercheurs
                 imageStudents = new Image("file:C:/Users/popo1/OneDrive - HESSO/HES/inf/javaFX/projectTest/Louis.png");
                 break;
             case 3 : //Mode avec 3 chercheurs
                 imageStudents = new Image("file:C:/Users/popo1/OneDrive - HESSO/HES/inf/javaFX/projectTest/Jeremie.png");
                 break;
-             */
         }
     }
 
@@ -71,11 +71,15 @@ public class Students extends ObjectScheme{
 
     @Override
     public void changeRadiusCommunication(int radius) {
+        this.radiusFinal = radius;
     }
 
     @Override
-    public double[] getPosition() {
-        return new double[0];
+    public ArrayList<double[]> getPosition() {
+        ArrayList<double[]> position = new ArrayList();
+        position.add(positionX);
+        position.add(positionY);
+        return position;
     }
 
     @Override
@@ -85,7 +89,7 @@ public class Students extends ObjectScheme{
 
     @Override
     public Image getImage() {
-        return null;
+        return imageStudents;
     }
 
     @Override
