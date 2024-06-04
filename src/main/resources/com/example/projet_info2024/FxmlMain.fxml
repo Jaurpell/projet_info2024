@@ -12,7 +12,7 @@
       <Button fx:id="buttonStart" layoutX="934.0" layoutY="27.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" text="Start" />
       <Button fx:id="buttonStop" layoutX="934.0" layoutY="68.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" text="Stop" />
       <Button fx:id="buttonRes" layoutX="934.0" layoutY="119.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" text="Restart" />
-      <AnchorPane layoutX="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0">
+      <AnchorPane fx:id="AnchSimul" layoutX="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0">
          <children>
             <Canvas height="800.0" width="800.0" />
          </children>
