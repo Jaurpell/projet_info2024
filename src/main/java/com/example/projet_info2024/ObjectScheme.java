@@ -1,5 +1,7 @@
 package com.example.projet_info2024;
 
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 /**
@@ -7,11 +9,22 @@ import javafx.scene.image.Image;
  */
 public abstract class ObjectScheme {
 // Variables
-protected float positionX, positionY;
-protected float radiusCommunication;
+protected int ZoneMax_X, ZoneMax_Y, ZoneMin_X, ZoneMin_Y;
+protected int nbrStudents = 5;
+protected double[] positionX = new double[nbrStudents];
+protected double[] positionY = new double[nbrStudents];
+protected int radiusCommunication;
+protected int radiusDetection;
+protected int radiusFinal;
 protected float[] direction;
-protected float velocityMagnitude;
-protected Image image;
+protected int velocityMagnitude;
+protected Image imageStudents;
+protected Image imageDiploma;
+protected int[] steps = new int[nbrStudents];
+protected int nbrDecalage = 1;
+private Canvas canvas;
+GraphicsContext gc = canvas.getGraphicsContext2D();
+protected double[] targetX, targetY;
 
 // Set methods
 /**
@@ -25,20 +38,20 @@ public abstract void changeImage(Image image);
  * @param positionX The new position in the x-axis
  * @param positionY The new position in the y-axis
  */
-public abstract void changePosition(float positionX, float positionY);
+public abstract void changePosition(double[] positionX, double[] positionY);
 
 /**
  * Change the communication radius value.
  * @param radius The new radius value
  */
-public abstract void changeRadiusCommunication(float radius);
+public abstract void changeRadiusCommunication(int radius);
 
 // Get methods
 /**
  * This method returns the object position.
  * @return A float array containing the position {x,y}
  */
-public abstract float[] getPosition();
+public abstract double[] getPosition();
 
 /**
  * This method returns the object communication radius.

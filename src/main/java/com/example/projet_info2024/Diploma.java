@@ -8,22 +8,29 @@ public class Diploma extends ObjectScheme{
 
     @Override
     public void changeImage(Image image) {
+        imageDiploma = new Image("file:C:/Users/popo1/OneDrive - HESSO/HES/inf/javaFX/projectTest/Diplome.png");
+    }
+
+    @Override
+    public void changePosition(double[] position_X, double[] position_Y) {
+        for (int i = 0; i < 1; i++) {
+            targetX[i] = 0;
+            targetY[i] = 0;
+            // Dessine le soleil (position fixe)
+            gc.drawImage(imageDiploma, position_X[i], position_Y[i]);
+        }
+
 
     }
 
     @Override
-    public void changePosition(float positionX, float positionY) {
+    public void changeRadiusCommunication(int radius) {
 
     }
 
     @Override
-    public void changeRadiusCommunication(float radius) {
-
-    }
-
-    @Override
-    public float[] getPosition() {
-        return new float[0];
+    public double[] getPosition() {
+        return new double[0];
     }
 
     @Override
