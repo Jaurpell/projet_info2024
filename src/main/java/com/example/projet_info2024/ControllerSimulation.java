@@ -2,12 +2,16 @@ package com.example.projet_info2024;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class ControllerSimulation extends Application {
 
@@ -30,16 +34,24 @@ public class ControllerSimulation extends Application {
 
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
         primaryStage.setTitle("Exemple de chronologie");
-        Group root = new Group();
+
+
+        // Charger le fichier FXML
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FxmlMain.fxml"));
+        AnchorPane root = loader.load();
         Scene theScene = new Scene(root);
         primaryStage.setScene(theScene);
 
-        root.getChildren().add(canvas);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        ZONE_MAX_X = canvas.getWidth();
-        ZONE_MAX_Y = canvas.getHeight();
+        // Obtenir le contrôleur et le canevas
+        MainController controller = loader.getController();
+        Canvas canvasSimu = controller.getCanvas();
+
+
+        GraphicsContext gc = canvasSimu.getGraphicsContext2D();
+        ZONE_MAX_X = canvasSimu.getWidth();
+        ZONE_MAX_Y = canvasSimu.getHeight();
         n = ZONE_MAX_Y / (NUM_PLANETS * rayon + (2* rayon));
         if ( ZONE_MAX_Y /((n%2)-NbrDecalage)<newY[NUM_PLANETS-1] &&( ZONE_MAX_Y>newY[NUM_PLANETS-1]) ){
             NbrDecalage += 1;
