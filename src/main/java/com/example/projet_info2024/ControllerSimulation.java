@@ -2,6 +2,7 @@ package com.example.projet_info2024;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -13,7 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ControllerSimulation extends Application {
+public class ControllerSimulation  {
 
     private static final double ZONE_MIN_X = 0;
     private  double ZONE_MAX_X  ;
@@ -31,113 +32,102 @@ public class ControllerSimulation extends Application {
     private double n;
     private int NbrDecalage = 1;
 
+    @FXML
+    private Canvas canvasSimu;
 
-
-    @Override
-    public void start(Stage primaryStage) throws IOException {
-        primaryStage.setTitle("Exemple de chronologie");
-
-
-        // Charger le fichier FXML
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("FxmlMain.fxml"));
-        AnchorPane root = loader.load();
-        Scene theScene = new Scene(root);
-        primaryStage.setScene(theScene);
-
-        // Obtenir le contrôleur et le canevas
-        MainController controller = loader.getController();
-        Canvas canvasSimu = controller.getCanvas();
-
-
-        GraphicsContext gc = canvasSimu.getGraphicsContext2D();
-        ZONE_MAX_X = canvasSimu.getWidth();
-        ZONE_MAX_Y = canvasSimu.getHeight();
-        n = ZONE_MAX_Y / (NUM_PLANETS * rayon + (2* rayon));
-        if ( ZONE_MAX_Y /((n%2)-NbrDecalage)<newY[NUM_PLANETS-1] &&( ZONE_MAX_Y>newY[NUM_PLANETS-1]) ){
-            NbrDecalage += 1;
-        }
-
-
-        Image student = new Image("earth.png");
-        Image sun = new Image("file:C:/Users/popo1/OneDrive - HESSO/HES/inf/javaFX/projectTest/sun.png");
-
-        // Initialisation des positions et étapes pour chaque students
-        for (int i = 0; i < NUM_PLANETS; i++) {
-            newX[i] = 0;
-            newY[i] = i * 2 * rayon;
-            steps[i] = 1;
-        }
-
-        final long startNanoTime = System.nanoTime();
-        new AnimationTimer() {
-            public void handle(long currentNanoTime) {
-                double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
-
-                // Efface le canvas
-                gc.clearRect(0, 0,ZONE_MAX_X , ZONE_MAX_Y);
-
-
-                System.out.println(NbrDecalage);
-                // Met à jour les positions et dessine chaque students
-                for (int i = 0; i < NUM_PLANETS; i++) {
-                    // Met à jour l'étape en fonction de la position
-
-                    if (newX[i] >= ZONE_MAX_X - student.getWidth()) {
-                        steps[i] = 2;
-                    }
-                    if ((newY[i] >= rayon *2*NUM_PLANETS* NbrDecalage + (i+1)*rayon*2 ) && (steps[i] == 2)) {
-                        steps[i] = 3;
-                    }
-                    if (newX[i] <= ZONE_MIN_X && steps[i] == 3) {
-                        steps[i] = 4;
-                    }
-                    if ((newY[i] >= rayon * 2 * NUM_PLANETS * NbrDecalage + (i+1)*rayon*2) && (steps[i] == 4)) {
-                        steps[i] = 5;
-                    }
-                    if(newY[i] >= ZONE_MAX_Y-rayon*2 ) {
-                        steps[i] = 6;
-                    }
-                    if(newX[i] >= ZONE_MAX_X - student.getWidth() && steps[i] == 6) {
-                        steps[i] = 7;
-                    }
+    @FXML
+    public void initalize(){
 
 
 
+    // Obtenir le contrôleur et le canevas
+    //MainController controller = loader.getController();
 
 
-                    // Met à jour la position en fonction de l'étape
-                    switch (steps[i]) {
-                        case 1:
-                        case 5:
-                        case 6:
-                            newX[i] += vitesse;
-                            break;
-                        case 2:
-                        case 4:
-                            newY[i] += vitesse;
-                            break;
-                        case 3:
-                            newX[i] -= vitesse;
-                            break;
-                    }
+    GraphicsContext gc = canvasSimu.getGraphicsContext2D();
+    ZONE_MAX_X = canvasSimu.getWidth();
+    ZONE_MAX_Y = canvasSimu.getHeight();
+    n = ZONE_MAX_Y / (NUM_PLANETS * rayon + (2* rayon));
+    if ( ZONE_MAX_Y /((n%2)-NbrDecalage)<newY[NUM_PLANETS-1] &&( ZONE_MAX_Y>newY[NUM_PLANETS-1]) ){
+        NbrDecalage += 1;
+    }
 
-                    // Dessine les students à la nouvelle position
-                    gc.drawImage(student, newX[i], newY[i]);
+
+    Image student = new Image("earth.png");
+    Image sun = new Image("file:C:/Users/popo1/OneDrive - HESSO/HES/inf/javaFX/projectTest/sun.png");
+
+    // Initialisation des positions et étapes pour chaque students
+    for (int i = 0; i < NUM_PLANETS; i++) {
+        newX[i] = 0;
+        newY[i] = i * 2 * rayon;
+        steps[i] = 1;
+    }
+
+    final long startNanoTime = System.nanoTime();
+    new AnimationTimer() {
+        public void handle(long currentNanoTime) {
+            double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
+
+            // Efface le canvas
+            gc.clearRect(0, 0,ZONE_MAX_X , ZONE_MAX_Y);
+
+
+            System.out.println(NbrDecalage);
+            // Met à jour les positions et dessine chaque students
+            for (int i = 0; i < NUM_PLANETS; i++) {
+                // Met à jour l'étape en fonction de la position
+
+                if (newX[i] >= ZONE_MAX_X - student.getWidth()) {
+                    steps[i] = 2;
+                }
+                if ((newY[i] >= rayon *2*NUM_PLANETS* NbrDecalage + (i+1)*rayon*2 ) && (steps[i] == 2)) {
+                    steps[i] = 3;
+                }
+                if (newX[i] <= ZONE_MIN_X && steps[i] == 3) {
+                    steps[i] = 4;
+                }
+                if ((newY[i] >= rayon * 2 * NUM_PLANETS * NbrDecalage + (i+1)*rayon*2) && (steps[i] == 4)) {
+                    steps[i] = 5;
+                }
+                if(newY[i] >= ZONE_MAX_Y-rayon*2 ) {
+                    steps[i] = 6;
+                }
+                if(newX[i] >= ZONE_MAX_X - student.getWidth() && steps[i] == 6) {
+                    steps[i] = 7;
                 }
 
 
 
-                // Dessine le soleil (position fixe)
-                gc.drawImage(sun, target_X, target_Y);
+
+
+                // Met à jour la position en fonction de l'étape
+                switch (steps[i]) {
+                    case 1:
+                    case 5:
+                    case 6:
+                        newX[i] += vitesse;
+                        break;
+                    case 2:
+                    case 4:
+                        newY[i] += vitesse;
+                        break;
+                    case 3:
+                        newX[i] -= vitesse;
+                        break;
+                }
+
+                // Dessine les students à la nouvelle position
+                gc.drawImage(student, newX[i], newY[i]);
             }
-        }.start();
 
-        primaryStage.show();
-    }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-}
+
+            // Dessine le soleil (position fixe)
+            gc.drawImage(sun, target_X, target_Y);
+        }
+    }.start();
+    }}
+
+
 
 
