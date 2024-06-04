@@ -22,9 +22,11 @@ public class ControllerSimulation extends Application {
     private double[] newX = new double[NUM_PLANETS];
     private double[] newY = new double[NUM_PLANETS];
     private int[] steps = new int[NUM_PLANETS];
-    private int rayon = 20;
-    private int vitesse = 7;
-    private int n = 2;
+    private int rayon = 5;
+    private int vitesse = 15;
+    private double n;
+    private int NbrDecalage = 1;
+
 
 
     @Override
@@ -33,11 +35,16 @@ public class ControllerSimulation extends Application {
         Group root = new Group();
         Scene theScene = new Scene(root);
         primaryStage.setScene(theScene);
-        Canvas canvas = new Canvas(800, 600);
+
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         ZONE_MAX_X = canvas.getWidth();
         ZONE_MAX_Y = canvas.getHeight();
+        n = ZONE_MAX_Y / (NUM_PLANETS * rayon + (2* rayon));
+        if ( ZONE_MAX_Y /((n%2)-NbrDecalage)<newY[NUM_PLANETS-1] &&( ZONE_MAX_Y>newY[NUM_PLANETS-1]) ){
+            NbrDecalage += 1;
+        }
+
 
         Image student = new Image("earth.png");
         Image sun = new Image("file:C:/Users/popo1/OneDrive - HESSO/HES/inf/javaFX/projectTest/sun.png");
@@ -57,19 +64,22 @@ public class ControllerSimulation extends Application {
                 // Efface le canvas
                 gc.clearRect(0, 0,ZONE_MAX_X , ZONE_MAX_Y);
 
+
+                System.out.println(NbrDecalage);
                 // Met à jour les positions et dessine chaque students
                 for (int i = 0; i < NUM_PLANETS; i++) {
                     // Met à jour l'étape en fonction de la position
+
                     if (newX[i] >= ZONE_MAX_X - student.getWidth()) {
                         steps[i] = 2;
                     }
-                    if ((newY[i] >= rayon *2*NUM_PLANETS*n + (i+1)*rayon*2 ) && (steps[i] == 2)) {
+                    if ((newY[i] >= rayon *2*NUM_PLANETS* NbrDecalage + (i+1)*rayon*2 ) && (steps[i] == 2)) {
                         steps[i] = 3;
                     }
                     if (newX[i] <= ZONE_MIN_X && steps[i] == 3) {
                         steps[i] = 4;
                     }
-                    if ((newY[i] >= rayon * 4 * NUM_PLANETS * n + (i+1)*rayon*2) && (steps[i] == 4)) {
+                    if ((newY[i] >= rayon * 2 * NUM_PLANETS * NbrDecalage + (i+1)*rayon*2) && (steps[i] == 4)) {
                         steps[i] = 5;
                     }
                     if(newY[i] >= ZONE_MAX_Y-rayon*2 ) {
@@ -78,6 +88,7 @@ public class ControllerSimulation extends Application {
                     if(newX[i] >= ZONE_MAX_X - student.getWidth() && steps[i] == 6) {
                         steps[i] = 7;
                     }
+
 
 
 
