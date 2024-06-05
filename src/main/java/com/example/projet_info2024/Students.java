@@ -2,7 +2,6 @@ package com.example.projet_info2024;
 
 import javafx.scene.image.Image;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Students extends ObjectScheme{
@@ -76,7 +75,7 @@ public class Students extends ObjectScheme{
 
     @Override
     public ArrayList<double[]> getPosition() {
-        ArrayList<double[]> position = new ArrayList();
+        ArrayList<double[]> position = new ArrayList<>();
         position.add(positionX);
         position.add(positionY);
         return position;
@@ -94,7 +93,21 @@ public class Students extends ObjectScheme{
 
     @Override
     public boolean isCommunication(ObjectScheme object) {
-        return false;
+        switch (modeChoisi){
+            case 1 : // 5 chercheurs
+                if (positionY[1] - positionY[0] < radiusCommunication && positionY[2] - positionY[1] < radiusCommunication && positionY[3] - positionY[2] < radiusCommunication && positionY[4] - positionY[3] < radiusCommunication) {
+                    communicationState = true;
+                }
+            case 2 : // 4 chercheurs
+                if (positionY[1] - positionY[0] < radiusCommunication && positionY[2] - positionY[1] < radiusCommunication && positionY[3] - positionY[2] < radiusCommunication) {
+                    communicationState = true;
+                }
+            case 3 : // 3 chercheurs
+                if (positionY[1] - positionY[0] < radiusCommunication && positionY[2] - positionY[1] < radiusCommunication) {
+                    communicationState = true;
+                }
+        }
+        return communicationState;
     }
 
 }
