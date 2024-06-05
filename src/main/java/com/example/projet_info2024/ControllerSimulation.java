@@ -6,7 +6,34 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class ControllerSimulation {
+    public void setEnvironmentSize(double width, double height) {
+        ZONE_MAX_X = width;
+        ZONE_MAX_Y = height;
+    }
+
+    public void setTargetPosition(double x, double y) {
+        target_X = x;
+        target_Y = y;
+    }
+
+    public void setAgentsSpeed(double speed) {
+        vitesse = (int) speed;
+    }
+
+    public void setAgentsDetectionRange(double detectionRange) {
+        // Modifier cette méthode en fonction de ce que représente la portée de détection des agents dans votre simulation
+        // Par exemple, si cette valeur est en pixels, vous pouvez l'affecter directement à une variable correspondante.
+        // Sinon, vous devrez peut-être ajuster la logique en conséquence.
+    }
+
+    public void setAgentsCommunicationRange(double communicationRange) {
+        // Modifier cette méthode de la même manière que setAgentsDetectionRange, mais pour la portée de communication des agents.
+    }
 
     private static final double ZONE_MIN_X = 0;
     private double ZONE_MAX_X;
@@ -29,7 +56,8 @@ public class ControllerSimulation {
 
     @FXML
     public void initialize() {
-        // Obtenir le GraphicsContext
+
+
         GraphicsContext gc = canvasSimu.getGraphicsContext2D();
         ZONE_MAX_X = canvasSimu.getWidth();
         ZONE_MAX_Y = canvasSimu.getHeight();
@@ -39,9 +67,8 @@ public class ControllerSimulation {
         }
 
         Image student = new Image("earth.png");
-        Image sun = new Image("file:C:/Users/popo1/OneDrive - HESSO/HES/inf/javaFX/projectTest/sun.png");
+        Image sun = new Image("Jeremy.jpeg");
 
-        // Initialisation des positions et étapes pour chaque student
         for (int i = 0; i < NUM_PLANETS; i++) {
             newX[i] = 0;
             newY[i] = i * 2 * rayon;
@@ -53,12 +80,9 @@ public class ControllerSimulation {
             public void handle(long currentNanoTime) {
                 double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
 
-                // Efface le canvas
                 gc.clearRect(0, 0, ZONE_MAX_X, ZONE_MAX_Y);
 
-                // Met à jour les positions et dessine chaque student
                 for (int i = 0; i < NUM_PLANETS; i++) {
-                    // Met à jour l'étape en fonction de la position
                     if (newX[i] >= ZONE_MAX_X - student.getWidth()) {
                         steps[i] = 2;
                     }
@@ -78,7 +102,6 @@ public class ControllerSimulation {
                         steps[i] = 7;
                     }
 
-                    // Met à jour la position en fonction de l'étape
                     switch (steps[i]) {
                         case 1:
                         case 5:
@@ -94,13 +117,14 @@ public class ControllerSimulation {
                             break;
                     }
 
-                    // Dessine les students à la nouvelle position
                     gc.drawImage(student, newX[i], newY[i]);
                 }
 
-                // Dessine le soleil (position fixe)
                 gc.drawImage(sun, target_X, target_Y);
             }
         }.start();
     }
+
+
+
 }

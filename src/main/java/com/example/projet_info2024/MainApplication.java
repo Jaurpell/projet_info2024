@@ -21,11 +21,7 @@ public class MainApplication extends Application {
 
         // Obtenir le contrôleur et lui passer le primaryStage
         ControllerAffichage controller = loader.getController();
-        if (controller != null) {
-            controller.setPrimaryStage(primaryStage);
-        } else {
-            System.err.println("Controller is null");
-        }
+
 
         // Afficher la première interface
         primaryStage.setScene(scene);

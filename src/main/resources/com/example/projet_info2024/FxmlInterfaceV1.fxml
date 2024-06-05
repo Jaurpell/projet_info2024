@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
+<?import javafx.scene.image.Image?>
 <AnchorPane fx:controller="com.example.projet_info2024.ControllerAffichage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <SplitPane dividerPositions="0.2604748603351955" orientation="VERTICAL" prefHeight="480.0" prefWidth="300.0">
@@ -23,28 +24,36 @@
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                     <children>
                                         <TextArea layoutX="48.0" layoutY="14.0" prefHeight="40.0" prefWidth="200.0" promptText="Choose data file" />
-                                        <Button fx:id="buttonFile" layoutX="122.0" layoutY="73.0" mnemonicParsing="false" text="File.txt" onAction="#handleFileTxtButton" />
+                                        <Button fx:id="buttonFile" layoutX="122.0" layoutY="73.0" mnemonicParsing="false" text="File.txt" onAction="#openSimulationScene" />
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                     <children>
-                                        <Button fx:id="buttonStudentA" layoutX="15.0" layoutY="73.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="59.0">
+                                        <Button fx:id="buttonStudentA" layoutX="15.0" layoutY="73.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="59.0"  onAction="#selectStudentA">
                                             <graphic>
-                                                <ImageView fitHeight="28.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@LouisPetit.jpeg" />
+                                                    </image>
+                                                </ImageView>
                                             </graphic>
                                         </Button>
-                                        <Button fx:id="buttonStudentB" layoutX="126.0" layoutY="73.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="57.0">
+                                        <Button fx:id="buttonStudentB" layoutX="115.0" layoutY="73.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="57.0"  onAction="#selectStudentB">
                                             <graphic>
-                                                <ImageView fitHeight="21.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@JeremyPetit.jpeg" />
+                                                    </image>
+                                                </ImageView>
                                             </graphic>
                                         </Button>
-                                        <Button fx:id="buttonStudentC" layoutX="219.0" layoutY="73.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="51.0">
+                                        <Button fx:id="buttonStudentC" layoutX="219.0" layoutY="73.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="51.0"  onAction="#selectStudentC">
                                             <graphic>
-                                                <ImageView fitHeight="26.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
                                             </graphic>
                                         </Button>
                                         <TextArea layoutX="48.0" layoutY="12.0" prefHeight="40.0" prefWidth="200.0" text="Choose your student" />
-                                        <Button fx:id="buttonStartInter" layoutX="100.0" layoutY="131.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="95.0" text="Start" onAction="#handleStartButton" />
+                                        <Button fx:id="buttonStartInter" layoutX="100.0" layoutY="138.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="95.0" text="Start" onAction="#handleStartButton" />
                                     </children>
                                 </AnchorPane>
                             </items>
