@@ -44,7 +44,7 @@
                                             </graphic>
                                         </Button>
                                         <TextArea layoutX="48.0" layoutY="12.0" prefHeight="40.0" prefWidth="200.0" text="Choose your student" />
-                                        <Button fx:id="buttonStartInter" layoutX="100.0" layoutY="131.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="95.0" text="Start" />
+                                        <Button fx:id="buttonStartInter" layoutX="100.0" layoutY="131.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="95.0" text="Start" onAction="#handleStartButton" />
                                     </children>
                                 </AnchorPane>
                             </items>
