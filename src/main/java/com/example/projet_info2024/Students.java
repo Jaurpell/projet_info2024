@@ -97,15 +97,21 @@ public class Students extends ObjectScheme{
         switch (modeChoisi){
             case 1 : // 5 chercheurs
                 if (positionY[1] - positionY[0] < radiusCommunication && positionY[2] - positionY[1] < radiusCommunication && positionY[3] - positionY[2] < radiusCommunication && positionY[4] - positionY[3] < radiusCommunication) {
-
+                    communicationState = true;
+                }else{
+                    communicationState = false;
                 }
             case 2 : // 4 chercheurs
                 if (positionY[1] - positionY[0] < radiusCommunication && positionY[2] - positionY[1] < radiusCommunication && positionY[3] - positionY[2] < radiusCommunication) {
-
+                    communicationState = true;
+                }else{
+                    communicationState = false;
                 }
             case 3 : // 3 chercheurs
                 if (positionY[1] - positionY[0] < radiusCommunication && positionY[2] - positionY[1] < radiusCommunication) {
-
+                    communicationState = true;
+                }else{
+                    communicationState = false;
                 }
         }
         return false;
