@@ -6,13 +6,17 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-
+import javafx.stage.FileChooser;
+import java.io.File;
 import java.io.IOException;
 
 public class ControllerAffichage {
 
     @FXML
     private Button buttonStartInter;
+
+    @FXML
+    private Button buttonFileTxt;
 
     private Stage primaryStage;
 
@@ -28,6 +32,29 @@ public class ControllerAffichage {
             openSimulationScene();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleFileTxtButton() {
+        // Crée un FileChooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir un fichier de données");
+
+        // Définit le filtre de fichiers pour n'afficher que les fichiers .txt
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Fichiers TXT (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Ouvre la boîte de dialogue de sélection de fichier
+        File selectedFile = fileChooser.showOpenDialog(primaryStage);
+
+        // Vérifie si un fichier a été sélectionné
+        if (selectedFile != null) {
+            // Traitez le fichier sélectionné ici
+            System.out.println("Fichier sélectionné : " + selectedFile.getAbsolutePath());
+            // Vous pouvez lire les données du fichier et les traiter en conséquence
+        } else {
+            System.out.println("Aucun fichier sélectionné.");
         }
     }
 
