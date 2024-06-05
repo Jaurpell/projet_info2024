@@ -18,10 +18,12 @@ public class ControllerAffichage {
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        System.out.println("Primary stage set: " + primaryStage);
     }
 
     @FXML
     private void handleStartButton() {
+        System.out.println("Start button clicked");
         try {
             openSimulationScene();
         } catch (IOException e) {
@@ -30,6 +32,7 @@ public class ControllerAffichage {
     }
 
     private void openSimulationScene() throws IOException {
+        System.out.println("Opening simulation scene");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FxmlMain.fxml"));
         AnchorPane root = loader.load();
         Scene scene = new Scene(root);
