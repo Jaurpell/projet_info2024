@@ -27,6 +27,7 @@ protected int nbrDecalage = 1;
 private Canvas canvas;
 GraphicsContext gc = canvas.getGraphicsContext2D();
 protected double[] targetX, targetY;
+protected boolean communicationState;
 
 // Set methods
 /**
