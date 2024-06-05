@@ -15,44 +15,66 @@ import java.util.List;
 import java.util.Random;
 
 public class ControllerSimulation {
+    public void setEnvironmentSize(double width, double height) {
+        this.ZONE_MAX_X = width;
+        this.ZONE_MAX_Y = height;
+    }
+
+    public void setTargetPosition(double x, double y) {
+        this.diplomeX = x;
+        this.diplomeY = y;
+    }
+
+    public void setAgentsSpeed(double speed) {
+        for (int i = 0; i < NUM_STUDENTS; i++) {
+            xVelocity[i] = speed;
+            yVelocity[i] = speed;
+        }
+    }
+
+    public void setAgentsDetectionRange(double detectionRange) {
+        this.detectionRayon = detectionRange;
+    }
+
+    public void setAgentsCommunicationRange(double communicationRange) {
+        this.COMMUNICATION_RADIUS = communicationRange;
+    }
 
     private static final double ZONE_MIN_X = 0;
     private double ZONE_MAX_X;
     private double ZONE_MIN_Y = 0;
     private double ZONE_MAX_Y;
-    private double sunX = 192;  // Position X du soleil
-    private double sunY = 192;  // Position Y du soleil
-    private double sunRayon = 20;  // Rayon du soleil
-    private double detectionRayon = 10;  // Rayon de détection du soleil
-    private List<Integer> planetsFoundSun = new ArrayList<>();
-    private static final double COMMUNICATION_RADIUS = 30;  // Rayon de communication entre planètes
+    private double diplomeX;  // Position X du diplome
+    private double diplomeY;  // Position Y du diplome
+    private final double diplomeRayon = 20;  // Rayon du diplome
+    private double detectionRayon ;  // Rayon de détection du diplome
+    private List<Integer> studentsFoundDiplome = new ArrayList<>();
+    private double COMMUNICATION_RADIUS;  // Rayon de communication entre étudiants
 
-    private static final int NUM_PLANETS = 5;
-    private double[] newX = new double[NUM_PLANETS];
-    private double[] newY = new double[NUM_PLANETS];
-    private double[] xVelocity = new double[NUM_PLANETS];
-    private double[] yVelocity = new double[NUM_PLANETS];
-    private int rayon = 20;  // Rayon des planètes
-    private double attractionStrength = 0.05;  // Force d'attraction vers le soleil
+    private static final int NUM_STUDENTS = 5;
+    private double[] newX = new double[NUM_STUDENTS];
+    private double[] newY = new double[NUM_STUDENTS];
+    private double[] xVelocity = new double[NUM_STUDENTS];
+    private double[] yVelocity = new double[NUM_STUDENTS];
+    private int rayon = 20;  // Rayon des étudiants
 
     @FXML
     private Canvas canvasSimu;
+
     @FXML
     public void initialize() {
-
-
         GraphicsContext gc = canvasSimu.getGraphicsContext2D();
         ZONE_MAX_X = canvasSimu.getWidth();
         ZONE_MAX_Y = canvasSimu.getHeight();
 
-        Image earth = new Image("earth.png");
-        Image sun = new Image("Jeremy.jpeg");
+        Image student = new Image("Louis.jpeg");
+        Image diplome = new Image("Jeremy.jpeg");
 
         Random random = new Random();
-        for (int i = 0; i < NUM_PLANETS; i++) {
+        for (int i = 0; i < NUM_STUDENTS; i++) {
             newX[i] = random.nextInt((int) (ZONE_MAX_X - rayon));
             newY[i] = random.nextInt((int) (ZONE_MAX_Y - rayon));
-            xVelocity[i] = 5;  // Vitesse initiale entre -3 et 3
+            xVelocity[i] = 5;
             yVelocity[i] = 5;
         }
 
@@ -60,22 +82,19 @@ public class ControllerSimulation {
             public void handle(long currentNanoTime) {
                 gc.clearRect(0, 0, ZONE_MAX_X, ZONE_MAX_Y);
 
-                // Dessiner les planètes
-                for (int i = 0; i < NUM_PLANETS; i++) {
+                // Dessiner les étudiants
+                for (int i = 0; i < NUM_STUDENTS; i++) {
                     if (xVelocity[i] != 0 || yVelocity[i] != 0) {
-                        double distanceToSun = Math.sqrt(Math.pow(newX[i] + rayon / 2 - sunX, 2) + Math.pow(newY[i] + rayon / 2 - sunY, 2));
+                        double distanceToDiplome = Math.sqrt(Math.pow(newX[i] + rayon / 2 - diplomeX, 2) + Math.pow(newY[i] + rayon / 2 - diplomeY, 2));
 
-                        if (distanceToSun < detectionRayon + sunRayon) {
+                        if (distanceToDiplome < detectionRayon + diplomeRayon) {
                             xVelocity[i] = 0;
                             yVelocity[i] = 0;
-                            if (!planetsFoundSun.contains(i)) {
-                                planetsFoundSun.add(i);
-                                informOtherPlanets(i);
+                            if (!studentsFoundDiplome.contains(i)) {
+                                studentsFoundDiplome.add(i);
+                                informOtherStudents(i);
                             }
                         } else {
-                            double angle = Math.atan2(sunY - (newY[i] + rayon / 2), sunX - (newX[i] + rayon / 2));
-                            xVelocity[i] += Math.cos(angle) * attractionStrength;
-                            yVelocity[i] += Math.sin(angle) * attractionStrength;
 
                             newX[i] += xVelocity[i];
                             newY[i] += yVelocity[i];
@@ -89,11 +108,11 @@ public class ControllerSimulation {
                         }
                     }
 
-                    gc.drawImage(earth, newX[i], newY[i], rayon, rayon);
+                    gc.drawImage(student, newX[i], newY[i], rayon, rayon);
                 }
 
-                // Dessiner le soleil
-                gc.drawImage(sun, sunX - sunRayon / 2, sunY - sunRayon / 2, sunRayon, sunRayon);
+                // Dessiner le diplome
+                gc.drawImage(diplome, diplomeX - diplomeRayon / 2, diplomeY - diplomeRayon / 2, diplomeRayon, diplomeRayon);
             }
         }.start();
 
@@ -101,26 +120,26 @@ public class ControllerSimulation {
         readDataFromFile("config.txt");
     }
 
-    private void informOtherPlanets(int planetIndex) {
-        for (int i = 0; i < NUM_PLANETS; i++) {
-            if (i != planetIndex) {
-                double distance = Math.sqrt(Math.pow(newX[i] - newX[planetIndex], 2) + Math.pow(newY[i] - newY[planetIndex], 2));
+    private void informOtherStudents(int studentIndex) {
+        for (int i = 0; i < NUM_STUDENTS; i++) {
+            if (i != studentIndex) {
+                double distance = Math.sqrt(Math.pow(newX[i] - newX[studentIndex], 2) + Math.pow(newY[i] - newY[studentIndex], 2));
                 if (distance <= COMMUNICATION_RADIUS) {
-                    double angle = Math.atan2(sunY - (newY[i] + rayon / 2), sunX - (newX[i] + rayon / 2));
-                    double distanceToSun = Math.sqrt(Math.pow(sunX - (newX[i] + rayon / 2), 2) + Math.pow(sunY - (newY[i] + rayon / 2), 2));
+                    double angle = Math.atan2(diplomeY - (newY[i] + rayon / 2), diplomeX - (newX[i] + rayon / 2));
+                    double distanceToDiplome = Math.sqrt(Math.pow(diplomeX - (newX[i] + rayon / 2), 2) + Math.pow(diplomeY - (newY[i] + rayon / 2), 2));
                     double speed = 2;
 
                     xVelocity[i] = Math.cos(angle) * speed;
                     yVelocity[i] = Math.sin(angle) * speed;
 
-                    if (distanceToSun < speed) {
-                        newX[i] = sunX - rayon / 2;
-                        newY[i] = sunY - rayon / 2;
+                    if (distanceToDiplome < speed) {
+                        newX[i] = diplomeX - rayon / 2;
+                        newY[i] = diplomeY - rayon / 2;
                         xVelocity[i] = 0;
                         yVelocity[i] = 0;
                     }
 
-                    planetsFoundSun.add(i);
+                    studentsFoundDiplome.add(i);
                 }
             }
         }
