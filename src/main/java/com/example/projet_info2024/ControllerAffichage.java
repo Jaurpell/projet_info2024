@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ControllerAffichage {
+    private double[] variable;
 
     @FXML
     private Button buttonStartInter;
@@ -80,7 +81,7 @@ public class ControllerAffichage {
         }
     }
 
-    private List<Double> readDataFromFile(File file) throws IOException {
+    public List<Double> readDataFromFile(File file) throws IOException {
         List<Double> variables = new ArrayList<>();
         BufferedReader br = new BufferedReader(new FileReader(file));
         String line;
@@ -98,4 +99,5 @@ public class ControllerAffichage {
         br.close();
         return variables;
     }
+
 }

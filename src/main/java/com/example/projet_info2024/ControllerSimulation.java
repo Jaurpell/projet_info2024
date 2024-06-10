@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,16 +15,41 @@ import java.util.List;
 import java.util.Random;
 
 public class ControllerSimulation {
+    public void setEnvironmentSize(double width, double height) {
+        this.ZONE_MAX_X = width;
+        this.ZONE_MAX_Y = height;
+    }
+
+    public void setTargetPosition(double x, double y) {
+        this.diplomeX = x;
+        this.diplomeY = y;
+    }
+
+    public void setAgentsSpeed(double speed) {
+        for (int i = 0; i < NUM_STUDENTS; i++) {
+            xVelocity[i] = speed;
+            yVelocity[i] = speed;
+        }
+    }
+
+    public void setAgentsDetectionRange(double detectionRange) {
+        this.detectionRayon = detectionRange;
+    }
+
+    public void setAgentsCommunicationRange(double communicationRange) {
+        this.COMMUNICATION_RADIUS = communicationRange;
+    }
+
     private static final double ZONE_MIN_X = 0;
     private double ZONE_MAX_X;
     private double ZONE_MIN_Y = 0;
     private double ZONE_MAX_Y;
-    private double diplomeX;  // Position X du diplome
-    private double diplomeY;  // Position Y du diplome
-    private final double diplomeRayon = 20;  // Rayon du diplome
-    private double detectionRayon;  // Rayon de détection du diplome
+    private double diplomeX = 192;  // Position X du diplome
+    private double diplomeY = 192;  // Position Y du diplome
+    private double diplomeRayon = 20;  // Rayon du diplome
+    private double detectionRayon = 10;  // Rayon de détection du diplome
     private List<Integer> studentsFoundDiplome = new ArrayList<>();
-    private double COMMUNICATION_RADIUS;  // Rayon de communication entre étudiants
+    private double COMMUNICATION_RADIUS = 100;  // Rayon de communication entre étudiants
 
     private static final int NUM_STUDENTS = 5;
     private double[] newX = new double[NUM_STUDENTS];
@@ -31,6 +57,7 @@ public class ControllerSimulation {
     private double[] xVelocity = new double[NUM_STUDENTS];
     private double[] yVelocity = new double[NUM_STUDENTS];
     private int rayon = 20;  // Rayon des étudiants
+    private double attractionStrength = 0.05;  // Force d'attraction vers le diplome
 
     @FXML
     private Canvas canvasSimu;
@@ -38,23 +65,16 @@ public class ControllerSimulation {
     @FXML
     public void initialize() {
         GraphicsContext gc = canvasSimu.getGraphicsContext2D();
-
-        // Lire les données à partir du fichier
-        readDataFromFile("configuration.txt");
+        ZONE_MAX_X = canvasSimu.getWidth();
+        ZONE_MAX_Y = canvasSimu.getHeight();
 
         Image student = new Image("Louis.jpeg");
         Image diplome = new Image("Jeremy.jpeg");
 
         Random random = new Random();
         for (int i = 0; i < NUM_STUDENTS; i++) {
-            try {
-                newX[i] = getRandomDouble(random, ZONE_MAX_X - rayon);
-                newY[i] = getRandomDouble(random, ZONE_MAX_Y - rayon);
-            } catch (IllegalArgumentException e) {
-                // Gérer l'exception
-                newX[i] = random.nextDouble() * (ZONE_MAX_X - rayon); // Valeur aléatoire entre 0 et ZONE_MAX_X - rayon
-                newY[i] = random.nextDouble() * (ZONE_MAX_Y - rayon); // Valeur aléatoire entre 0 et ZONE_MAX_Y - rayon
-            }
+            newX[i] = random.nextInt((int) (ZONE_MAX_X - rayon));
+            newY[i] = random.nextInt((int) (ZONE_MAX_Y - rayon));
             xVelocity[i] = 5;
             yVelocity[i] = 5;
         }
@@ -76,6 +96,9 @@ public class ControllerSimulation {
                                 informOtherStudents(i);
                             }
                         } else {
+                            double angle = Math.atan2(diplomeY - (newY[i] + rayon / 2), diplomeX - (newX[i] + rayon / 2));
+                            xVelocity[i] += Math.cos(angle) * attractionStrength;
+                            yVelocity[i] += Math.sin(angle) * attractionStrength;
 
                             newX[i] += xVelocity[i];
                             newY[i] += yVelocity[i];
@@ -96,13 +119,7 @@ public class ControllerSimulation {
                 gc.drawImage(diplome, diplomeX - diplomeRayon / 2, diplomeY - diplomeRayon / 2, diplomeRayon, diplomeRayon);
             }
         }.start();
-    }
 
-    private double getRandomDouble(Random random, double bound) {
-        if (bound <= 0) {
-            throw new IllegalArgumentException("Bound must be positive");
-        }
-        return random.nextDouble() * bound;
     }
 
     private void informOtherStudents(int studentIndex) {
@@ -129,6 +146,12 @@ public class ControllerSimulation {
             }
         }
     }
+
+}
+public double[] getvariable(){
+    return this.variable;
+}
+
 
     private void readDataFromFile(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -173,3 +196,5 @@ public class ControllerSimulation {
         this.COMMUNICATION_RADIUS = communicationRange;
     }
 }
+
+

@@ -9,10 +9,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainApplication extends Application {
+    private double[] variable;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
         primaryStage.setTitle("Interface de simulation");
+
 
         // Charger le fichier FXML pour la première interface
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FxmlInterfaceV1.fxml"));
@@ -21,7 +23,9 @@ public class MainApplication extends Application {
 
         // Obtenir le contrôleur et lui passer le primaryStage
         ControllerAffichage controller = loader.getController();
-
+        public void setList(double[] variable){
+            this.variable = variable;
+        }
 
         // Afficher la première interface
         primaryStage.setScene(scene);
