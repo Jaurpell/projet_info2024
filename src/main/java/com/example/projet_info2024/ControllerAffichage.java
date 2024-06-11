@@ -15,37 +15,35 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ControllerAffichage {
-    private double[] variable;
+public class ControllerAffichage extends MainApplication {
+    private List<Double> variable;
+    private ControllerSimulation cs;
 
     @FXML
     private Button buttonStartInter;
 
     private Stage primaryStage;
+    private int studentChoice = 1;
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
-    // ici int studentChoice corespond au choix de l etudiant
-    private int studentChoice = 1;
-    // Méthode pour définir le choix de l'étudiant sur A
+
     @FXML
     private void selectStudentA() {
-        studentChoice = 1;
+        this.studentChoice = 1;
         System.out.println("Student A selected");
     }
 
-    // Méthode pour définir le choix de l'étudiant sur B
     @FXML
     private void selectStudentB() {
-        studentChoice = 2;
+        this.studentChoice = 2;
         System.out.println("Student B selected");
     }
 
-    // Méthode pour définir le choix de l'étudiant sur C
     @FXML
     private void selectStudentC() {
-        studentChoice = 3;
+        this.studentChoice = 3;
         System.out.println("Student C selected");
     }
 
@@ -53,24 +51,38 @@ public class ControllerAffichage {
     private void handleStartButton() throws IOException {
         System.out.println("Start button clicked");
 
-        // Charger le fichier FXML de la nouvelle fenêtre
+        // Ensure that the cs object is initialized and variable is set
+        if (cs == null || variable == null) {
+            System.out.println("Simulation controller or variable list not initialized!");
+            return;
+        }
+
+        // Load the FXML file for the new window
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FxmlMain.fxml"));
         Parent root = loader.load();
+        cs = loader.getController();
+        cs.setVariable(variable);
+        cs.startButton();
 
-        // Créer une nouvelle scène
+        // Create a new scene
         Scene scene = new Scene(root);
 
-        // Créer une nouvelle fenêtre et définir la scène
+        // Create a new window and set the scene
         Stage newStage = new Stage();
         newStage.setScene(scene);
 
-        // Afficher la nouvelle fenêtre
+        // Show the new window
         newStage.show();
     }
 
     @FXML
     private void openSimulationScene() throws IOException {
         System.out.println("Opening simulation scene");
+
+        if (cs == null) {
+            initializeSimulationController();
+        }
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         File selectedFile = fileChooser.showOpenDialog(primaryStage);
@@ -78,11 +90,23 @@ public class ControllerAffichage {
             System.out.println("File selected: " + selectedFile.getName());
             List<Double> variables = readDataFromFile(selectedFile);
             System.out.println(variables);
+
+            // Ensure that the cs object is not null before calling its methods
+            if (cs != null) {
+                cs.setVariable(variables);
+            }
         }
     }
 
+    private void initializeSimulationController() throws IOException {
+        // Load the FXML file for the simulation window
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FxmlMain.fxml"));
+        Parent root = loader.load();
+        cs = loader.getController();
+    }
+
     public List<Double> readDataFromFile(File file) throws IOException {
-        List<Double> variables = new ArrayList<>();
+        List<Double> variable = new ArrayList<>();
         BufferedReader br = new BufferedReader(new FileReader(file));
         String line;
         while ((line = br.readLine()) != null) {
@@ -90,14 +114,18 @@ public class ControllerAffichage {
             for (String part : parts) {
                 try {
                     double value = Double.parseDouble(part);
-                    variables.add(value);
+                    variable.add(value);
                 } catch (NumberFormatException e) {
                     // Ignore non-numeric values
                 }
             }
         }
         br.close();
-        return variables;
+        this.variable = variable; // Assign the list to the instance variable
+        return variable;
     }
 
+    public List<Double> getList() {
+        return this.variable;
+    }
 }

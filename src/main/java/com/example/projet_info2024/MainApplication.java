@@ -23,9 +23,7 @@ public class MainApplication extends Application {
 
         // Obtenir le contrôleur et lui passer le primaryStage
         ControllerAffichage controller = loader.getController();
-        public void setList(double[] variable){
-            this.variable = variable;
-        }
+
 
         // Afficher la première interface
         primaryStage.setScene(scene);
