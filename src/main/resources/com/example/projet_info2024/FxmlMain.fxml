@@ -5,7 +5,14 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.AnchorPane?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 
+
+<?import javafx.scene.image.Image?>
 <AnchorPane fx:controller="com.example.projet_info2024.ControllerSimulation" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ProgressBar fx:id="progresseBarTime" layoutX="400.0" layoutY="21.0" prefWidth="200.0" progress="0.0" />
@@ -13,6 +20,11 @@
       <Button fx:id="buttonStop" layoutX="934.0" layoutY="68.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" text="Stop" />
       <Button fx:id="buttonRes" layoutX="934.0" layoutY="119.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" text="Restart" />
       <AnchorPane  fx:id="AnchSimul" layoutX="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0">
+            <ImageView fitHeight="800" fitWidth="800" preserveRatio="true">
+               <image>
+                  <Image url="@energypolis-sion-suisse.jpg" />
+               </image>
+            </ImageView>
          <children>
             <Canvas fx:id="canvasSimu" height="800.0" width="800.0" />
          </children>

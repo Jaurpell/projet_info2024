@@ -21,11 +21,7 @@ public class MainApplication extends Application {
         AnchorPane root = loader.load();
         Scene scene = new Scene(root);
 
-        // Obtenir le contrôleur et lui passer le primaryStage
-        ControllerAffichage controller = loader.getController();
-        public void setList(double[] variable){
-            this.variable = variable;
-        }
+
 
         // Afficher la première interface
         primaryStage.setScene(scene);

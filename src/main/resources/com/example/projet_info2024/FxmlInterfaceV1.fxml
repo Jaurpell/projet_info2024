@@ -49,7 +49,11 @@
                                         </Button>
                                         <Button fx:id="buttonStudentC" layoutX="219.0" layoutY="73.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="51.0"  onAction="#selectStudentC">
                                             <graphic>
-                                                <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@SamuelPetit.jpg" />
+                                                    </image>
+                                                </ImageView>
                                             </graphic>
                                         </Button>
                                         <TextArea layoutX="48.0" layoutY="12.0" prefHeight="40.0" prefWidth="200.0" text="Choose your student" />
