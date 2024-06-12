@@ -13,6 +13,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
+import javafx.util.Duration;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
+import javafx.util.Duration;
 
 public class ControllerSimulation {
     public void setEnvironmentSize(double width, double height) {
@@ -58,9 +73,46 @@ public class ControllerSimulation {
     private double[] yVelocity = new double[NUM_STUDENTS];
     private int rayon = 20;  // Rayon des étudiants
     private double attractionStrength = 0.05;  // Force d'attraction vers le diplome
+    private double progressAtStop;
 
     @FXML
     private Canvas canvasSimu;
+    @FXML
+    private Timeline timeline;
+    @FXML
+    private ProgressBar progresseBarTime;
+
+
+
+
+    @FXML
+    private void handleStartButtonAction() {
+        // Reprendre la timeline là où elle s'est arrêtée
+        timeline.play();
+    }
+
+    // Gestionnaire pour le bouton Stop
+    @FXML
+    private void handleStopButtonAction() {
+        // Arrêter la timeline et enregistrer la progression actuelle
+        timeline.stop();
+        progressAtStop = progresseBarTime.getProgress();
+    }
+
+    // Gestionnaire pour le bouton Restart
+    @FXML
+    private void handleRestartButtonAction() {
+        // Redémarrer la timeline depuis le début
+        timeline.stop();
+        progresseBarTime.setProgress(1.0);
+        timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(progresseBarTime.progressProperty(), 1.0)),
+                new KeyFrame(Duration.minutes(1), new KeyValue(progresseBarTime.progressProperty(), 0.0))
+        );
+        timeline.setCycleCount(1);
+        timeline.playFromStart();
+    }
+
 
     @FXML
     public void initialize() {
@@ -77,7 +129,19 @@ public class ControllerSimulation {
             newY[i] = random.nextInt((int) (ZONE_MAX_Y - rayon));
             xVelocity[i] = 5;
             yVelocity[i] = 5;
+
+            // Initialiser la barre de progression à 1 (pleine)
+            progresseBarTime.setProgress(1.0);
+            progressAtStop = 1.0;
+
+            // Créer un Timeline pour la barre de progression
+            timeline = new Timeline(
+                    new KeyFrame(Duration.ZERO, new KeyValue(progresseBarTime.progressProperty(), progressAtStop)),
+                    new KeyFrame(Duration.minutes(1), new KeyValue(progresseBarTime.progressProperty(), 0.0))
+            );
+            timeline.setCycleCount(1); // Ne répéter qu'une fois
         }
+
 
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
