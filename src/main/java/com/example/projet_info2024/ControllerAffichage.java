@@ -3,8 +3,10 @@ package com.example.projet_info2024;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 
@@ -15,8 +17,43 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ControllerAffichage extends MainApplication {
+public class ControllerAffichage {
+    @FXML
+    private Button buttonStart;
+
+    @FXML
+    private Button buttonStop;
+
+    @FXML
+    private Button buttonRes;
+
+    @FXML
+    private Canvas canvasSimu;
+
+    @FXML
+    private ProgressBar progresseBarTime;
+
     private List<Double> variable;
+
+    @FXML
+    public void handleStartButtonAction() {
+        // Implémentation pour démarrer la simulation
+        System.out.println("Simulation started with variables: " + variable);
+    }
+
+    @FXML
+    public void handleStopButtonAction() {
+        // Implémentation pour arrêter la simulation
+        System.out.println("Simulation stopped.");
+    }
+
+    @FXML
+    public void handleRestartButtonAction() {
+        // Implémentation pour redémarrer la simulation
+        System.out.println("Simulation restarted.");
+    }
+
+
     private ControllerSimulation cs;
 
     @FXML
@@ -50,38 +87,24 @@ public class ControllerAffichage extends MainApplication {
     @FXML
     private void handleStartButton() throws IOException {
         System.out.println("Start button clicked");
+        if (cs == null) {
+            initializeSimulationController();
+        }
 
-        // Ensure that the cs object is initialized and variable is set
+        // Assurez-vous que l'objet cs est initialisé et que la variable est définie
         if (cs == null || variable == null) {
             System.out.println("Simulation controller or variable list not initialized!");
             return;
         }
 
-        // Load the FXML file for the new window
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("FxmlMain.fxml"));
-        Parent root = loader.load();
-        cs = loader.getController();
+        // Chargez le fichier FXML pour la nouvelle fenêtre
         cs.setVariable(variable);
         cs.startButton();
-
-        // Create a new scene
-        Scene scene = new Scene(root);
-
-        // Create a new window and set the scene
-        Stage newStage = new Stage();
-        newStage.setScene(scene);
-
-        // Show the new window
-        newStage.show();
     }
 
     @FXML
-    private void openSimulationScene() throws IOException {
-        System.out.println("Opening simulation scene");
-
-        if (cs == null) {
-            initializeSimulationController();
-        }
+    private void fileButtonOn() throws IOException {
+        System.out.println("Opening file");
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -90,19 +113,25 @@ public class ControllerAffichage extends MainApplication {
             System.out.println("File selected: " + selectedFile.getName());
             List<Double> variables = readDataFromFile(selectedFile);
             System.out.println(variables);
-
-            // Ensure that the cs object is not null before calling its methods
-            if (cs != null) {
-                cs.setVariable(variables);
-            }
         }
     }
 
+    @FXML
     private void initializeSimulationController() throws IOException {
-        // Load the FXML file for the simulation window
+        // Chargez le fichier FXML pour la fenêtre de simulation
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FxmlMain.fxml"));
-        Parent root = loader.load();
+        AnchorPane root = loader.load();
         cs = loader.getController();
+        Scene scene2 = new Scene(root);
+
+        // Assurez-vous que le primaryStage est défini avant de l'utiliser
+        if (this.primaryStage != null) {
+            primaryStage.setScene(scene2);
+            primaryStage.show();
+            cs.setVariable(this.variable);
+        } else {
+            throw new IllegalStateException("Primary stage is not set");
+        }
     }
 
     public List<Double> readDataFromFile(File file) throws IOException {
@@ -116,12 +145,12 @@ public class ControllerAffichage extends MainApplication {
                     double value = Double.parseDouble(part);
                     variable.add(value);
                 } catch (NumberFormatException e) {
-                    // Ignore non-numeric values
+                    // Ignorez les valeurs non numériques
                 }
             }
         }
         br.close();
-        this.variable = variable; // Assign the list to the instance variable
+        this.variable = variable; // Assignez la liste à la variable d'instance
         return variable;
     }
 

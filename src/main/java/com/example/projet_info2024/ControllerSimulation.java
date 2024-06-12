@@ -42,6 +42,21 @@ public class ControllerSimulation {
 
     @FXML
     private Canvas canvasSimu;
+    @FXML
+    private void handleStartButtonAction() {
+
+    }
+
+    // Gestionnaire pour le bouton Stop
+    @FXML
+    private void handleStopButtonAction() {
+
+    }
+
+    // Gestionnaire pour le bouton Restart
+    @FXML
+    private void handleRestartButtonAction() {
+       }
 
     @FXML
     public void initialize() {
