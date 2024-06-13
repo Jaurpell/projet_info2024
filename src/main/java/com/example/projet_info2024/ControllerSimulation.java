@@ -9,12 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static java.lang.Math.random;
-
 public class ControllerSimulation {
     private List<Double> ListVariable;  // Liste des variables paramétrables
-    private double ZONE_MAX_X;// Taille maximale de la zone en X
-    private double ZONE_MIN_X = 0;// Taille Minimale de la zone en X
+    private double ZONE_MAX_X; // Taille maximale de la zone en X
+    private double ZONE_MIN_X = 0; // Taille Minimale de la zone en X
     private double ZONE_MAX_Y;  // Taille maximale de la zone en Y
     private double ZONE_MIN_Y = 0;  // Taille minimale de la zone en Y (définie à 0)
     private double diplomeX;  // Position X du diplôme
@@ -25,38 +23,31 @@ public class ControllerSimulation {
     private double COMMUNICATION_RADIUS;  // Rayon de communication entre étudiants
     private GraphicsContext gc;  // Contexte graphique pour le dessin sur Canvas
 
-    private static final int NUM_STUDENTS = 5;  // Nombre d'étudiants
-    private double[] newX = new double[NUM_STUDENTS];  // Nouvelles positions X des étudiants
-    private double[] newY = new double[NUM_STUDENTS];  // Nouvelles positions Y des étudiants
-    private double[] xVelocity = new double[NUM_STUDENTS];  // Vitesse en X des étudiants
-    private double[] yVelocity = new double[NUM_STUDENTS];  // Vitesse en Y des étudiants
-    private int rayon = 20;  // Rayon des étudiants
+
+    private int rayon = 20;  // Rayon des étudiants pour leur tailles
     private double attractionStrength = 0.05;  // Force d'attraction vers le diplôme
-    Image student = new Image("Louis.jpeg");  // Image représentant un étudiant
-    Image diplome = new Image("Jeremy.jpeg");  // Image représentant un diplôme
+    private Image student;  // Image représentant un étudiant
+    private Image diplome;  // Image représentant un diplôme
+    private int nbreStudent = 1;
+    private boolean running = false;
+    private int NUM_STUDENTS = 6;  // Nombre d'étudiants
+    private double[] newX ;  // Nouvelles positions X des étudiants
+    private double[] newY ;  // Nouvelles positions Y des étudiants
+    private double[] xVelocity ;  // Vitesse en X des étudiants
+    private double[] yVelocity ;  // Vitesse en Y des étudiants
+    private AnimationTimer timer;  // Instance de l'AnimationTimer
 
     // Initialiser la taille de l'environnement
-    public void setVariable(List<Double> variable){
+    public void setVariable(List<Double> variable) {
         this.ListVariable = variable;
+    }
+
+    public void setImage(int nbre) {
+        this.nbreStudent = nbre;
     }
 
     @FXML
     private Canvas canvasSimu;
-    @FXML
-    private void handleStartButtonAction() {
-
-    }
-
-    // Gestionnaire pour le bouton Stop
-    @FXML
-    private void handleStopButtonAction() {
-
-    }
-
-    // Gestionnaire pour le bouton Restart
-    @FXML
-    private void handleRestartButtonAction() {
-       }
 
     @FXML
     public void initialize() {
@@ -65,9 +56,53 @@ public class ControllerSimulation {
         ZONE_MAX_Y = canvasSimu.getHeight();
     }
 
+    // Gestionnaire pour le bouton Stop
+    @FXML
+    private void handleStopButtonAction() {
+        running = false;
+    }
+
+    // Gestionnaire pour le bouton Restart
+    @FXML
+    private void handleRestartButtonAction() {
+        running = true;
+    }
+
+    @FXML
     // Méthode appelée lors du démarrage de la simulation
-    public void startButton() {
+    public void handleStartButtonAction() {
+        if (running) {
+            return;
+        }
+
+        running = true;
+
+        // Arrête l'animation en cours si elle existe
+        if (timer != null) {
+            timer.stop();
+        }
+
         // Initialisation des paramètres à partir de ListVariable
+        switch (nbreStudent) {
+            case 1:
+                student = new Image("Louis.jpeg");
+                this.NUM_STUDENTS = 4;
+                break;
+            case 2:
+                student = new Image("Jeremy.jpeg");
+                this.NUM_STUDENTS = 3;
+                break;
+            case 3:
+                student = new Image("SamuelPetit.jpg");
+                this.NUM_STUDENTS = 5;
+                break;
+        }
+         newX = new double[NUM_STUDENTS];  // Nouvelles positions X des étudiants
+         newY = new double[NUM_STUDENTS];  // Nouvelles positions Y des étudiants
+         xVelocity = new double[NUM_STUDENTS];  // Vitesse en X des étudiants
+         yVelocity = new double[NUM_STUDENTS];  // Vitesse en Y des étudiants
+
+        diplome = new Image("earth.png");
         diplomeX = ListVariable.get(2);
         diplomeY = ListVariable.get(3);
         detectionRayon = ListVariable.get(5);
@@ -82,9 +117,12 @@ public class ControllerSimulation {
             yVelocity[i] = ListVariable.get(4);  // Vitesse initiale en Y
         }
 
-        // Démarrage de l'animation
-        new AnimationTimer() {
+        // Création de l'instance d'AnimationTimer
+        timer = new AnimationTimer() {
             public void handle(long currentNanoTime) {
+                if (!running) {
+                    return;
+                }
                 gc.clearRect(0, 0, ZONE_MAX_X, ZONE_MAX_Y);  // Efface le canvas
 
                 // Dessine les étudiants et gère leur mouvement
@@ -101,7 +139,7 @@ public class ControllerSimulation {
 
                         } else {
                             // Calcule la direction vers le diplôme
-                            double angle = random() * 6.28;
+                            double angle = Math.random() * 6.28;
                             xVelocity[i] += Math.cos(angle) * attractionStrength;
                             yVelocity[i] += Math.sin(angle) * attractionStrength;
 
@@ -126,7 +164,9 @@ public class ControllerSimulation {
                 // Dessine le diplôme à sa position
                 gc.drawImage(diplome, diplomeX - diplomeRayon / 2, diplomeY - diplomeRayon / 2, diplomeRayon, diplomeRayon);
             }
-        }.start();  // Démarre l'animation
+        };
+
+        timer.start();  // Démarre l'animation
     }
 
     // Méthode pour informer les autres étudiants de la position du diplôme

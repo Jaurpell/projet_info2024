@@ -70,18 +70,21 @@ public class ControllerAffichage {
     private void selectStudentA() {
         this.studentChoice = 1;
         System.out.println("Student A selected");
+
     }
 
     @FXML
     private void selectStudentB() {
         this.studentChoice = 2;
         System.out.println("Student B selected");
+
     }
 
     @FXML
     private void selectStudentC() {
         this.studentChoice = 3;
         System.out.println("Student C selected");
+
     }
 
     @FXML
@@ -99,7 +102,7 @@ public class ControllerAffichage {
 
         // Chargez le fichier FXML pour la nouvelle fenêtre
         cs.setVariable(variable);
-        cs.startButton();
+
     }
 
     @FXML
@@ -129,6 +132,7 @@ public class ControllerAffichage {
             primaryStage.setScene(scene2);
             primaryStage.show();
             cs.setVariable(this.variable);
+            cs.setImage(studentChoice);
         } else {
             throw new IllegalStateException("Primary stage is not set");
         }
